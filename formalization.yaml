@@ -1,0 +1,214 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "The Quarter Lemma, and the exact ρ-partitions are not permutable: Erdős #197 (partial result)"
+  description: >-
+    Proves the Quarter Lemma: in a linear order of an integer interval [α, β] (β − α ≥ 8) with no
+    monotone 3-term arithmetic progression, with leading parity π and leading quarter Q, every
+    point q ≡ Q (mod 4) of [α + 4, β − 4] comes before every point z ≢ π (mod 2) of
+    [α + 4, β − 4]. As a consequence (Theorem 7.2), for every k ≥ 1 and every real φ, neither
+    colour class {n ≥ 1 : ⌊(2k + 1)(log₂ n − φ)⌋ ≡ c (mod 2)} (c = 0, 1) of the exact ρ-partition,
+    which has 2k + 1 runs of alternating colours per octave, has an enumeration without monotone
+    3-term arithmetic progressions; no assumption is made on the enumeration. The proof uses
+    Kasel's ladder lemmas (zigzag and flood) through Rules A and B of the Lean-verified interval
+    gadget of Alex-lop/erdos-197-interval-gadget, whose module is included verbatim. This is
+    partial progress on Erdős Problem #197, which asks whether ℕ can be partitioned into two such
+    sets; that question remains open.
+  authors:
+    - "Alex Lopez"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "Alex Lopez"
+
+classification:
+  arxiv: ["math.CO", "math.NT"]
+  msc2020: ["11B25", "05D10", "05A05"]
+
+sources:
+  - title: "Quarter Lemma, Theorem L* and Theorem 7.2: the exact ρ-partitions are not permutable (docs/proof.md in this repository)"
+    type: original-proof
+    relationship: other
+    note: >-
+      The theorems and proofs first presented here, developed by Claude agents (Claude Fable 5.1
+      and Claude Opus 5.5, Anthropic) and checked by three adversarial AI referees (proof,
+      computation and scope lenses), none of which refuted them. The refereed text is the working
+      note work/p197_m2_r3/rho/proof.md (not included in this repository). docs/proof.md is a
+      rewrite of its Sections 0–5; the parts it re-derives (the three-case proof of the Quarter
+      Lemma without reflection, the derivation of the leading parity from the residue
+      hypotheses, the phases lemma, Theorem L* in the one-anchor-pair form used for Theorem 7.2,
+      the integer form of the B-link and the details of the run lemma) were not refereed, and
+      each is mirrored by the kernel-checked Lean proof. The scope referee observed that the
+      Quarter Lemma is implied by Theorems 2.1 and 2.4 of Sharma (2009); the proof here is the
+      two-flood argument.
+  - title: "Erdős Problem #197"
+    authors:
+      - "Thomas F. Bloom"
+    contributors:
+      - name: "Paul Erdős"
+        role: "problem-proposer"
+      - name: "Ronald Graham"
+        role: "problem-proposer"
+    id: "https://www.erdosproblems.com/197"
+    type: "web page"
+    relationship: background
+  - title: "On permutations containing no long arithmetic progressions"
+    authors:
+      - "J. A. Davis"
+      - "R. C. Entringer"
+      - "R. L. Graham"
+      - "G. J. Simmons"
+    type: "article"
+    location: "Acta Arithmetica 34 (1977), 81–90"
+    relationship: background
+    note: "Shows that every enumeration of ℕ contains a monotone 3-term arithmetic progression."
+  - title: "Enumerating permutations that avoid three term arithmetic progressions"
+    authors:
+      - "Arun Sharma"
+    type: "article"
+    location: "Electronic Journal of Combinatorics 16 (2009), #R63"
+    relationship: background
+    note: >-
+      Theorems 2.1 and 2.4 (orientation of a mean towards two points of the same parity, and
+      binary congruence with the first entry) imply the Quarter Lemma, as the scope referee
+      observed. That derivation is not formalized here.
+  - title: "Structural rigidity in the Erdős–Graham two-set permutation problem"
+    authors:
+      - "William Kasel"
+    id: "arXiv:2609.02939"
+    type: "preprint"
+    relationship: background
+    note: >-
+      Source of the ladder lemmas (zigzag and flood, Lemmas 23–26) behind Rules A and B, which
+      the Quarter Lemma uses; shows that the dyadic partition fails.
+
+related_formalizations:
+  - id: "https://github.com/Alex-lop/erdos-197-interval-gadget"
+    relationship: builds-on
+    note: >-
+      Theorem I and its ladder toolkit (Erdos197Interval.Good.alt, Good.par, Good.lead_iff,
+      Good.ruleA, Good.ruleB). Its module Erdos197Interval/Basic.lean is included here verbatim,
+      with the same namespace; the Quarter Lemma is proved from these rules.
+  - id: "https://github.com/Alex-lop/erdos-197-tower-obstruction"
+    relationship: other
+    note: >-
+      Theorem R* (tower obstruction): alternating run colourings with run ratios tending to 2 are
+      not permutable. It does not reach runs of ratio below 7/4; the runs of the exact
+      ρ-partitions have ratio 2^(1/(2k+1)) ≤ 2^(1/3). Theorem 7.2 here covers them; its integer core
+      (Erdos197Rho.runs_int) covers any integer run boundaries r_j with slivers
+      2 r_j − r_(j+2k+1) in {0, 1} and run lengths tending to infinity. Same encoding of the formal-conjectures
+      predicate and the same Adm/adm_of_enum pattern; no statement is shared.
+  - id: "https://github.com/google-deepmind/formal-conjectures/blob/5d8b04d3d41b745cc3f2f3cdd5ed04b60c500983/FormalConjectures/ErdosProblems/197.lean"
+    relationship: other
+    note: >-
+      Statement of Erdős #197 (Erdos197.erdos_197). The no-monotone-AP predicate in the conclusion
+      of Erdos197Rho.main_result is formal-conjectures' ¬HasMonotoneAP (Subtype.val ∘ f) 3 with
+      the definitions unfolded, since Challenge.lean may import only Mathlib.
+      checks/fidelity.lean restates the theorem with verbatim copies of the definitions.
+  - id: "https://github.com/Alex-lop/erdos-197-bounded-lag"
+    relationship: other
+    note: >-
+      An earlier, independent partial result on Erdős #197 from the same project (no two-set
+      solution with eventual lag ratio below 2), with the same encoding of the formal-conjectures
+      predicate.
+
+status:
+  scope: >-
+    Fully formalizes the Quarter Lemma (Erdos197Rho.quarter) and Theorem 7.2
+    (Erdos197Rho.main_result) of docs/proof.md, on top of the ladder toolkit of
+    Erdos197Interval/Basic.lean (included verbatim), together with the lemmas used in their proofs
+    (phases, the anchor lemma, Lemma 4.2, Theorem L* for one consecutive anchor pair and bottom
+    windows, the B-link, the run lemma). It does not resolve Erdős #197. Not formalized: the
+    general Theorem L* (a finite family of odd-distance anchor pairs, arbitrary windows),
+    Corollary Q and the other results of the working note (the ladder-path lemma, drifting
+    ρ-type colourings, log-periodic colourings), the derivation of the Quarter Lemma from
+    Sharma's Theorems 2.1 and 2.4, and the computations on the sharpness of the margin. The
+    computer checks of the referees are evidence for the informal proof and are not part of the
+    formalization.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["Claude Fable 5.1", "Claude Opus 5.5 (claude-opus-5-5)"]
+      framework: "Claude Code"
+      tool_setup: >-
+        Claude Code agents in an unattended research run on open Erdős problems: one main session
+        plus subagents. Claude agents found the Quarter Lemma and Theorem L*, using exhaustive
+        search, SAT solving (CaDiCaL) and exact-arithmetic checkers written in Python and C.
+        Three adversarial referee subagents checked the proof under separate lenses (proof,
+        computation, scope), each with its own code. A Claude Opus 5.5 subagent wrote the Lean
+        proof, iterating with the Lean compiler (mostly omega; linarith and nlinarith for the
+        run boundaries), and packaged this repository.
+      cost:
+        wall_time: "about one hour for the Lean formalization and packaging (2026-11-05); the proof and its refereeing took a few hours earlier on 2026-11-04 and 2026-11-05"
+        spend_usd: "subscription-based"
+        hardware: "local machine"
+      prompting_notes: >-
+        The user asked Claude to attack open Erdős problems, formalize what it proves and package
+        the results. No full solution of #197 was found; this repository packages a partial
+        result. The formalization was done unattended from a written brief.
+  spend_usd: "subscription-based"
+  notes: >-
+    The mathematics was produced by Claude Fable 5.1 and Claude Opus 5.5 (Anthropic) in Claude
+    Code under the direction of Alex Lopez; the Lean code and write-up were written by Claude
+    Opus 5.5. The informal proof was verified by three adversarial AI referees and the Lean kernel
+    checks both theorems. It has not been refereed by a human. Documentation corrections of
+    2026-11-10 (theorem numbering after docs/proof.md, three sentences) were made by Claude Sonnet
+    5.5 and Claude Fable 5.2; no Lean statement or proof was changed.
+
+fidelity:
+  divergences: >-
+    The write-up speaks of linear orders; in the Quarter Lemma the order of [α, β] is an injective
+    ranking σ : ℕ → ℕ (x comes before y iff σ x < σ y), which is equivalent for a finite set, and
+    the leading parity π and leading quarter Q are parameters characterised by the hypotheses hπ
+    and hQ (their existence is the zigzag lemma, proved as Erdos197Rho.phases, which is not a
+    statement of Challenge.lean). In Theorem 7.2 an enumeration is f : ℕ ≃ C with
+    formal-conjectures' ¬HasMonotoneAP (Subtype.val ∘ f) 3 unfolded; log₂ is Real.logb 2, the
+    floor is Int.floor and % 2 is Int.emod, so ⌊…⌋ % 2 ∈ {0, 1} also for negative floors, and the
+    classes are restricted to n ≥ 1 (Lean's Real.logb 2 0 = 0). The write-up's run boundaries
+    r_j = ⌈2^(φ + j/(2k + 1))⌉ are proved equivalent to the floor definition inside Lean
+    (Erdos197Rho.rho_runs, for natural indices j). ℕ is Lean's {0, 1, 2, …}, as in
+    formal-conjectures; β − 4 is truncated subtraction, the true value since β ≥ 8. No other
+    divergences known.
+
+review:
+  status: "self-assessed"
+  reviewers:
+    - "none"
+  notes: >-
+    The statements in Challenge.lean and Solution.lean were checked to elaborate to identical
+    terms (pp.all), and #print axioms reports only propext, Classical.choice and Quot.sound for
+    both. In checks/fidelity.lean Theorem 7.2 is restated with verbatim copies of
+    formal-conjectures' HasMonotoneAP, List.IsAPOfLength and List.IsAPOfLengthWith and proved by
+    exact; that file also shows that no partition (A, B) of ℕ whose positive part of A is a colour
+    class of an exact ρ-partition is a witness for Erdos197.erdos_197. checks/nonvacuity.lean shows
+    that the hypotheses are not vacuous: an explicit order of [0, 15] satisfies every hypothesis
+    of the Quarter Lemma, the enumeration predicate unfolded as in Challenge.lean is satisfiable,
+    and every colour class of every exact ρ-partition is infinite and has enumerations. The
+    informal proof survived three adversarial AI referees; it has not been refereed by a human.
+
+alignment:
+  namespace: "Erdos197Rho"
+  statements:
+    - source: "docs/proof.md, Lemma 3.1 (Quarter Lemma)"
+      lean: "Erdos197Rho.quarter"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        A linear order of [α, β] (α + 8 ≤ β) is an injective ranking σ on Set.Icc α β without
+        monotone 3-term APs; π and Q satisfy hπ (σ x < σ (x + 1) ↔ x % 2 = π) and hQ (for
+        x % 2 = π, σ x < σ (x + 2) ↔ x % 4 = Q); the conclusion is σ q < σ z for q, z in
+        Set.Icc (α + 4) (β - 4) with q % 4 = Q and z % 2 ≠ π.
+    - source: "docs/proof.md, Theorem 7.2 (refereed Theorem 5.2)"
+      lean: "Erdos197Rho.main_result"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        For 1 ≤ k, φ : ℝ and c < 2 there is no f : ℕ ≃
+        {n | 1 ≤ n ∧ ⌊(2 * k + 1) * (Real.logb 2 n - φ)⌋ % 2 = c} with formal-conjectures'
+        ¬HasMonotoneAP (Subtype.val ∘ f) 3 (unfolded).
+
+acknowledgements: "Lean 4 and Mathlib; the formal-conjectures project for the statement of Erdős #197; A. Sharma for Theorems 2.1 and 2.4; W. Kasel for the ladder lemmas; the Palomar template for the repository layout."
